@@ -20,7 +20,6 @@ namespace SmashGGEventTicker
         {
             Configuration = configuration;
             //specify instance of SmashGGInMemoryCache here to initialize it immediately upon app startup rather than after first reference in 'real' code
-            _ = SmashGGInMemoryCache.Instance;
         }
 
         public IConfiguration Configuration { get; }
@@ -28,12 +27,14 @@ namespace SmashGGEventTicker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            // TODO - Add HttpClientFactory
+            services.AddMemoryCache();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SmashGGEventTicker", Version = "v1" });
             });
+            services.AddSingleton<SmashGGInMemoryCache>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

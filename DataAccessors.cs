@@ -15,7 +15,7 @@ namespace SmashGGEventTicker
             return JsonConvert.DeserializeObject<SmashGGResponse>(responseString);
         }
 
-        public static async Task<string> GetEventsByTournamentStrive(HttpClient client, Uri endpoint, string token)
+        public static async Task<string> GetEventsByTournamentStrive(HttpClient client, Uri endpoint, string token, int videogameId)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, endpoint);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -25,7 +25,7 @@ namespace SmashGGEventTicker
             // A dictionary of dictionaries is required for complex arguments
 
             var tournamentFilter = new Dictionary<string, object>();
-            tournamentFilter.Add("videogameIds", new int[] { 33945 });
+            tournamentFilter.Add("videogameIds", new int[] { videogameId });
             tournamentFilter.Add("published", true);
             tournamentFilter.Add("hasOnlineEvents", true);
             tournamentFilter.Add("beforeDate", new DateTimeOffset(DateTime.Now).AddDays(14).ToUnixTimeSeconds());
@@ -37,7 +37,7 @@ namespace SmashGGEventTicker
             tournamentArguments.Add("filter", tournamentFilter);
 
             var eventFilter = new Dictionary<string, object>();
-            eventFilter.Add("videogameId", 33945);
+            eventFilter.Add("videogameId", videogameId);
 
             var eventArguments = new Dictionary<string, object>();
             eventArguments.Add("filter", eventFilter);
